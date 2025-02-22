@@ -1,5 +1,3 @@
-# app/routers/ollama_router.py
-
 from fastapi import APIRouter, HTTPException, Body
 from app.services.ollama_service import local_deepseek_summary
 

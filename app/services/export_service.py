@@ -3,14 +3,9 @@ import uuid
 from pathlib import Path
 import markdown
 
-# Se quiser gerar PDF, por exemplo, via pdfkit
-# import pdfkit  # ou weasyprint, ou outro
-# Se quiser gerar DOCX, via python-docx
-# from docx import Document
-
 TEMP_EXPORT_DIR = Path("temp_exports")
 TEMP_EXPORT_DIR.mkdir(exist_ok=True)
-
+ 
 def export_summary(summary_text: str, format_type: str) -> str:
     """
     Gera um arquivo no formato especificado (md, pdf, docx) a partir do texto do resumo.
