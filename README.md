@@ -1,6 +1,6 @@
 # SmartStudy
 
-**SmartStudy** é um backend em **Python + FastAPI** que automatiza a geração de resumos a partir de vídeos (por exemplo, do YouTube ou vídeos locais).  
+**SmartStudy** é um backend em **Python + FastAPI** que automatiza a geração de resumos a partir de vídeos do YouTube ou vídeos locais).  
 O fluxo principal envolve:
 
 1. **Download** ou **extração** do áudio (via `yt-dlp` ou `FFmpeg`).  
@@ -152,10 +152,6 @@ SMARSTUDY/
 - **`POST /test-flow`**  
   *Executa todo o pipeline em um só endpoint.*  
   Faz download (YouTube) → transcreve → gera resumo → exporta, retornando o arquivo final para download. Útil para testes sem precisar chamar cada rota separadamente.
-
----
-
-*(Use essas descrições no seu README ou documentação para orientar usuários sobre como consumir cada rota.)*
 
 ---
 
