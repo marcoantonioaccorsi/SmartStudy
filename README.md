@@ -1,14 +1,10 @@
-Abaixo segue um modelo de **README.md** mais enxuto e organizado, com **passo a passo** claro para rodar o projeto. Ajuste conforme seu estilo ou necessidades.
-
----
-
 # SmartStudy
 
-**SmartStudy** é um backend em **Python + FastAPI** que automatiza a geração de resumos a partir de vídeos (por exemplo, do YouTube).  
+**SmartStudy** é um backend em **Python + FastAPI** que automatiza a geração de resumos a partir de vídeos (por exemplo, do YouTube ou vídeos locais).  
 O fluxo principal envolve:
 
 1. **Download** ou **extração** do áudio (via `yt-dlp` ou `FFmpeg`).  
-2. **Transcrição** do áudio (usando [OpenAI Whisper](https://github.com/openai/whisper) ou outro STT).  
+2. **Transcrição** do áudio (usando [OpenAI Whisper](https://github.com/openai/whisper)).  
 3. **Resumo** do texto transcrito, chamando IA (DeepSeek, OpenAI GPT, ou IA local via Ollama).  
 4. **Exportação** do resumo em `.md`, `.pdf` ou `.docx`.  
 
@@ -31,10 +27,10 @@ O fluxo principal envolve:
 ## Pré-requisitos
 
 - **Python 3.9+**  
-- **`yt-dlp`** instalado (para download do YouTube) ou acessível via pip.  
-- **`ffmpeg`** instalado (para extrair áudio, se necessário).  
-- (Opcional) **Chaves de API** para usar DeepSeek ou OpenAI GPT, caso queira resumir remotamente.  
-- (Opcional) **Ollama** se for usar IA local (ex.: deepseek-r1:14b).
+- **`yt-dlp`**  
+- **`ffmpeg`**  
+- **Chaves de API** para usar DeepSeek ou OpenAI GPT, caso queira resumir remotamente.  
+- **Ollama** se for usar IA local (ex.: deepseek-r1:14b).
 
 ---
 
@@ -42,7 +38,7 @@ O fluxo principal envolve:
 
 1. **Clone o repositório**:
    ```bash
-   git clone https://github.com/seu-usuario/SmartStudy.git
+   git clone https://github.com/marcoantonioaccorsi/SmartStudy
    cd SmartStudy
    ```
 
@@ -59,7 +55,6 @@ O fluxo principal envolve:
    ```bash
    pip install -r requirements.txt
    ```
-   *(Ou use `pip freeze > requirements.txt` caso ainda não tenha o arquivo.)*
 
 4. **Rode o servidor**:
    ```bash
@@ -72,36 +67,95 @@ O fluxo principal envolve:
 ## Estrutura do Projeto
 
 ```
-SmartStudy/
-├── app/
-│   ├── main.py               # Ponto de entrada (FastAPI)
-│   ├── routers/
-│   │   ├── video_router.py
-│   │   ├── transcript_router.py
-│   │   ├── summary_router.py
-│   │   └── test_flow_router.py   # Endpoint que faz tudo (download->transcrever->resumir->exportar)
-│   ├── services/
-│   │   ├── video_service.py      # Download de vídeo
-│   │   ├── transcript_service.py # Transcrever áudio
-│   │   ├── deepseek_service.py   # Resumo via DeepSeek
-│   │   ├── openai_service.py     # Resumo via OpenAI GPT
-│   │   ├── ollama_service.py     # Resumo local (ex. deepseek-r1:14b)
-│   │   └── export_service.py     # Exportar resumo em .md, .pdf, .docx
-│   └── __init__.py
-├── .env            # Chaves de API (não versionar)
+SMARSTUDY/
+├── .gitignore
+├── README.md
 ├── requirements.txt
-└── README.md
+├── setup.py
+├── venv/
+├── main.py
+├── routers/
+│   ├── local_ollama_router.py
+│   ├── deepseek_router.py
+│   ├── openai_router.py
+│   ├── summary_router.py
+│   ├── test_flow_router.py
+│   ├── transcript_router.py
+│   ├── video_router.py
+│   └── __init__.py
+├── services/
+│   ├── local_ollama_service.py
+│   ├── deepseek_service.py
+│   ├── openai_service.py
+│   ├── export_service.py
+│   ├── test_audio_service.py
+│   ├── transcript_service.py
+│   ├── video_service.py
+│   └── __init__.py
+├── temp/
+├── temp_audio/
+├── temp_exports/
+└── samples/
 ```
 
 ---
 
-## Principais Endpoints
+## **Principais Endpoints**
 
-- **`POST /videos/download`**: Recebe link do YouTube, pode retornar transcrição (dependendo da implementação).  
-- **`POST /transcript/transcribe`**: Transcreve um arquivo de áudio (caminho local).  
-- **`POST /summary/summary`**: Recebe texto transcrito + prompt, gera resumo via IA escolhida.  
-- **`POST /files/export`**: Exporta o resumo em `.md`, `.pdf` ou `.docx`.  
-- **`POST /test/test-flow`**: Endpoint “all-in-one” para testes (baixa do YouTube → transcreve → resume → exporta).
+### **Videos**
+- **`POST /videos/upload`**  
+  *Upload de vídeo local.*  
+  Envie um arquivo de vídeo para o servidor, que poderá extrair o áudio e processá-lo futuramente.
+
+- **`POST /videos/download`**  
+  *Download de vídeo (ou áudio) do YouTube.*  
+  Recebe uma URL de YouTube e obtém o arquivo de áudio/vídeo localmente.
+
+---
+
+### **Convert to text**
+- **`POST /text/transcribe`**  
+  *Transcrever áudio em texto.*  
+  Recebe o caminho de um arquivo de áudio (local) e retorna o texto transcrito (por exemplo, usando Whisper).
+
+---
+
+### **API DeepSeek**
+- **`POST /deepseek/summary`**  
+  *Gera resumo usando a API DeepSeek.*  
+  Recebe um texto transcrito e um prompt, envia à API DeepSeek e retorna o resumo.
+
+---
+
+### **API OpenAI**
+- **`POST /openai/summary`**  
+  *Gera resumo usando OpenAI GPT (GPT-3.5, etc.).*  
+  Recebe texto transcrito + prompt e retorna a resposta do modelo GPT.
+
+---
+
+### **Local Ollama DeepSeek**
+- **`POST /ollama/summary`**  
+  *Gera resumo localmente, via Ollama (deepseek-r1:14b).*  
+  Executa um modelo local em sua máquina (chamando “ollama run”), processa o texto e retorna o resumo.
+
+---
+
+### **Export Summary**
+- **`POST /export/summary/export`**  
+  *Endpoint de exportação.*  
+  Gera um arquivo (`.md`, `.pdf`, `.docx`) a partir de um texto de resumo e retorna-o para download.
+
+---
+
+### **Test Flow**
+- **`POST /test-flow`**  
+  *Executa todo o pipeline em um só endpoint.*  
+  Faz download (YouTube) → transcreve → gera resumo → exporta, retornando o arquivo final para download. Útil para testes sem precisar chamar cada rota separadamente.
+
+---
+
+*(Use essas descrições no seu README ou documentação para orientar usuários sobre como consumir cada rota.)*
 
 ---
 
