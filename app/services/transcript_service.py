@@ -1,4 +1,5 @@
 import whisper
+import os
 
 # Carrega o modelo do Whisper uma única vez (ex.: "small")
 # Se você quiser usar GPU (CUDA), e tiver PyTorch com CUDA instalado:
@@ -13,6 +14,10 @@ def transcribe_audio_whisper(audio_path: str) -> str:
     # Transcreve o áudio
     result = model.transcribe(audio_path)
     text = result["text"]
+
+    if os.path.exists(audio_path):
+        os.remove(audio_path)
+
     return text
 
 
