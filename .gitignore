@@ -1,0 +1,13 @@
+# Ignorar o arquivo .env
+.env
+
+# Ignorar a pasta de ambiente virtual (exemplo)
+venv/
+
+# Ignorar arquivos compilados
+__pycache__/
+*.py[cod]
+
+# OS-specific
+.DS_Store
+Thumbs.db
