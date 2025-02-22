@@ -20,10 +20,10 @@ def test_flow_endpoint(
 ):
     """
     Endpoint de teste que faz o fluxo completo (sem upload local):
-    1) Baixa o vídeo do YouTube (áudio) via `download_youtube_video`.
-    2) Transcreve o áudio com Whisper (`transcribe_audio_whisper`).
+    1) Baixa o vídeo do YouTube (áudio).
+    2) Transcreve o áudio com Whisper.
     3) Gera resumo, usando o `user_prompt` e o `summary_provider` escolhido.
-    4) Exporta o resumo no formato escolhido (`export_summary`).
+    4) Exporta o resumo no formato escolhido.
     5) Retorna o arquivo final (FileResponse) para download.
 
     Exemplo de body JSON:
