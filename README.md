@@ -181,12 +181,7 @@ Para **testar tudo** de uma vez, use **`POST /test/test-flow`** com JSON:
 
 ## Exportação de Resumos
 
-O **`export_service.py`** contém funções para gerar arquivos `.md`, `.pdf`, `.docx`.  
-- **Markdown**: simplesmente salva o texto com extensão `.md`.  
-- **PDF**: pode usar libs como `pdfkit` (requer `wkhtmltopdf`) ou `WeasyPrint`.  
-- **DOCX**: usa `python-docx` para criar um documento Word.
-
-O endpoint **`POST /files/export`** exemplifica como receber `{ "summary_text": "...", "format_type": "pdf" }` e devolver um arquivo via **FileResponse**.
+O **`export_service.py`** contém funções para gerar arquivos `.md`, `.pdf`, `.docx`.
 
 ---
 
@@ -195,9 +190,7 @@ O endpoint **`POST /files/export`** exemplifica como receber `{ "summary_text": 
 - **Autenticação e Multiusuário**: Permitir que cada usuário tenha histórico de transcrições e resumos.  
 - **Armazenamento em DB**: Persistir textos, logs e configurações.  
 - **Frontend em React**: Criar interface amigável para gerenciar uploads, downloads e resumos.  
-- **Orquestração Assíncrona**: Se for lidar com vídeos grandes, usar Celery/RQ para processar em segundo plano.
 
 ---
 
-Feito! Se tiver dúvidas, abra uma [Issue](https://github.com/seu-usuario/SmartStudy/issues) ou entre em contato.  
 Obrigado por conferir o **SmartStudy**!
