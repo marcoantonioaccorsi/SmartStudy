@@ -2,10 +2,7 @@ import subprocess
 import re
 
 def sanitize_ai_response(ai_text: str) -> str:
-    """
-    Remove trechos entre <think> e </think>, 
-    além de possíveis espaços ou quebras extras.
-    """
+
     # Remove tudo entre <think> e </think>
     clean_text = re.sub(r"<think>.*?</think>", "", ai_text, flags=re.DOTALL)
     return clean_text.strip()
@@ -31,7 +28,7 @@ def local_deepseek_summary(raw_text: str, user_prompt: str) -> str:
             cmd,
             capture_output=True,
             text=True,
-            check=True,  # gera exceção se retornar código de erro
+            check=True, 
             encoding="utf-8" 
         )
         response_text = result.stdout.strip()

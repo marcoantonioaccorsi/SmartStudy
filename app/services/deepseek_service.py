@@ -35,8 +35,8 @@ def get_deepseek_summary(raw_text: str, user_prompt: str) -> str:
                 "content": f"{user_prompt}\n\nTexto: {raw_text}"
             }
         ],
-        "model": "deepseek-chat",       # Ajuste se houver outro modelo
-        "max_tokens": 2048,            # Exemplo
+        "model": "deepseek-chat",       # Ajustar o modelo
+        "max_tokens": 2048,            
         "temperature": 0.5,
         "top_p": 1,
         "frequency_penalty": 0,
@@ -54,13 +54,10 @@ def get_deepseek_summary(raw_text: str, user_prompt: str) -> str:
     }
 
     try:
-        # 5. Fazendo a chamada HTTP via requests
         response = requests.post(api_url, json=payload, headers=headers, timeout=60)
-        response.raise_for_status()  # dispara exceção se for 4xx/5xx
+        response.raise_for_status()  
 
         data = response.json()
-        # 6. Extraindo o texto do resumo
-        # Supondo que a resposta tenha algo como: {"choices":[{"message":{"content":"...resumo..."}}]}
         resumo = data["choices"][0]["message"]["content"]
         return resumo.strip()
 

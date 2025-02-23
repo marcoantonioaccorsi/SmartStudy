@@ -10,7 +10,7 @@ def generate_summary(
 ):
     """
     Recebe texto transcrito + prompt e retorna um resumo via GPT-3.5.
-    
+
     """
     try:
         resumo = get_openai_summary(transcribed_text, user_prompt)
