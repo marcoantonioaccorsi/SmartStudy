@@ -105,18 +105,18 @@ SMARSTUDY/
 ### **Videos**
 - **`POST /videos/upload`**  
   *Upload de vídeo local.*  
-  Envie um arquivo de vídeo para o servidor, que poderá extrair o áudio e processá-lo futuramente.
+  Faz o upload de um arquivo de vídeo.
 
 - **`POST /videos/download`**  
   *Download de vídeo (ou áudio) do YouTube.*  
-  Recebe uma URL de YouTube e obtém o arquivo de áudio/vídeo localmente.
+  Recebe uma URL de YouTube, e faz o download no formato MP3.
 
 ---
 
 ### **Convert to text**
 - **`POST /text/transcribe`**  
   *Transcrever áudio em texto.*  
-  Recebe o caminho de um arquivo de áudio (local) e retorna o texto transcrito (por exemplo, usando Whisper).
+  Recebe o caminho do arquivo de áudio (local) e retorna o texto transcrito.
 
 ---
 
@@ -137,7 +137,7 @@ SMARSTUDY/
 ### **Local Ollama DeepSeek**
 - **`POST /ollama/summary`**  
   *Gera resumo localmente, via Ollama (deepseek-r1:14b).*  
-  Executa um modelo local em sua máquina (chamando “ollama run”), processa o texto e retorna o resumo.
+  Executa um modelo local na máquina (chamando “ollama run”), processa o texto e retorna o resumo.
 
 ---
 
