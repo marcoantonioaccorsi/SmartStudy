@@ -9,12 +9,7 @@ def generate_summary(
     user_prompt: str = Body(...)
 ):
     """
-    Recebe texto transcrito + prompt e retorna o resumo do DeepSeek.
-    Exemplo de body:
-    {
-      "transcribed_text": "texto do áudio...",
-      "user_prompt": "Resuma em tópicos..."
-    }
+    Recebe texto transcrito + prompt e retorna o resumo da API do DeepSeek.
     """
     try:
         resumo = get_deepseek_summary(transcribed_text, user_prompt)

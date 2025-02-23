@@ -8,7 +8,7 @@ TEMP_EXPORT_DIR.mkdir(exist_ok=True)
  
 def export_summary(summary_text: str, format_type: str) -> str:
     """
-    Gera um arquivo no formato especificado (md, pdf, docx) a partir do texto do resumo.
+    Gera um arquivo no formato escolhido (md, pdf, docx) a partir do texto do resumo.
     Retorna o caminho para o arquivo gerado.
     """
     if format_type == "md":

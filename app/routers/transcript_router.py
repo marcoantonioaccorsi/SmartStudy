@@ -7,15 +7,13 @@ transcript_router = APIRouter()
 @transcript_router.post("/transcribe")
 def transcribe_audio(audio_path: str = Body(...)):
     """
-    Recebe um caminho de arquivo de áudio (ex.: 'temp_audio/xyz.mp3')
+    Recebe um caminho de arquivo de áudio
     e retorna o texto transcrito usando Whisper.
     """
-    # Verifica se o arquivo existe
     if not Path(audio_path).exists():
         raise HTTPException(status_code=400, detail="Arquivo de áudio não encontrado.")
 
     try:
-        # Chama a função do serviço de transcrição
         text = transcribe_audio_whisper(audio_path)
         return {"transcription": text}
     except Exception as e:

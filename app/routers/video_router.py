@@ -11,7 +11,7 @@ video_router = APIRouter()
 def upload_video(file: UploadFile = File(...)) -> Any:
     """
     Rota para upload de vídeo local.
-    Retorna o caminho do arquivo salvo ou alguma identificação.
+    Retorna o caminho do arquivo salvo.
     """
     if not file:
         raise HTTPException(status_code=400, detail="Nenhum arquivo foi enviado.")

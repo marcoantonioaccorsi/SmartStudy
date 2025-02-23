@@ -12,23 +12,18 @@ def get_deepseek_summary(raw_text: str, user_prompt: str) -> str:
     Retorna:
     - resumo gerado pelo DeepSeek (string)
     """
+    api_url = "https://api.deepseek.com/chat/completions" 
 
-    # 1. URL do endpoint do DeepSeek
-    api_url = "https://api.deepseek.com/chat/completions"  # Ajuste conforme a doc
-
-    # 2. Obter a chave da API do arquivo .env ou de variáveis de ambiente
     api_key = os.getenv("DEEPSEEK_API_KEY")
     if not api_key:
         raise RuntimeError("DEEPSEEK_API_KEY não está definida nas variáveis de ambiente.")
 
-    # 3. Cabeçalhos para a requisição
     headers = {
         "Content-Type": "application/json",
         "Accept": "application/json",
         "Authorization": f"Bearer {api_key}"
     }
 
-    # 4. Corpo da requisição, seguindo o modelo de 'messages' que a doc do DeepSeek sugere
     payload = {
         "messages": [
             {

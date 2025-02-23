@@ -10,12 +10,7 @@ def generate_summary(
 ):
     """
     Recebe texto transcrito + prompt e retorna um resumo via GPT-3.5.
-
-    Exemplo de body:
-    {
-      "transcribed_text": "texto do áudio...",
-      "user_prompt": "Resuma em tópicos..."
-    }
+    
     """
     try:
         resumo = get_openai_summary(transcribed_text, user_prompt)

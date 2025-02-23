@@ -12,11 +12,6 @@ def export_endpoint(
     """
     Recebe o texto do resumo e o formato desejado (md, pdf, docx).
     Gera o arquivo e retorna para download.
-    Exemplo body:
-    {
-      "summary_text": "texto do resumo...",
-      "format_type": "pdf"
-    }
     """
     try:
         file_path = export_summary(summary_text, format_type)

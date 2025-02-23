@@ -3,14 +3,7 @@ import requests
 
 def get_openai_summary(raw_text: str, user_prompt: str) -> str:
     """
-    Faz chamada à API do OpenAI GPT-3.5 e retorna um resumo (ou resposta) com base no prompt.
-
-    Parâmetros:
-    - raw_text: texto base (ex.: transcrição do vídeo)
-    - user_prompt: instruções do usuário (ex.: "Resuma os tópicos principais")
-
-    Retorna:
-    - texto gerado pelo GPT (string)
+    Faz chamada à API do OpenAI GPT-3.5 e retorna com base no prompt.
     """
 
     api_key = os.getenv("OPENAI_API_KEY")
