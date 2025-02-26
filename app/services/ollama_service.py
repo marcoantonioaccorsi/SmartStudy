@@ -3,7 +3,6 @@ import re
 
 def sanitize_ai_response(ai_text: str) -> str:
 
-    # Remove tudo entre <think> e </think>
     clean_text = re.sub(r"<think>.*?</think>", "", ai_text, flags=re.DOTALL)
     return clean_text.strip()
 
