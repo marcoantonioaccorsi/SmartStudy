@@ -1,33 +1,45 @@
 import os
 import requests
+from dotenv import load_dotenv
 
-def get_deepseek_summary(raw_text: str, user_prompt: str) -> str:
-    """
-    Envia o texto + prompt para a API do DeepSeek e retorna o resumo.
+def call_deepseek_api(payload: dict) -> dict:
 
-    Parâmetros:
-    - raw_text: texto base (por exemplo, o texto transcrito de um vídeo)
-    - user_prompt: instruções do usuário (ex: "Resuma os tópicos principais")
+    load_dotenv()
 
-    Retorna:
-    - resumo gerado pelo DeepSeek (string)
-    """
     api_url = "https://api.deepseek.com/chat/completions" 
-
     api_key = os.getenv("DEEPSEEK_API_KEY")
+    
     if not api_key:
-        raise RuntimeError("DEEPSEEK_API_KEY não está definida nas variáveis de ambiente.")
+        raise RuntimeError("DEEPSEEK_API_KEY não está definida no arquivo .env")
 
     headers = {
         "Content-Type": "application/json",
-        "Accept": "application/json",
-        "Authorization": f"Bearer {api_key}"
+        "Authorization": f"Bearer {api_key}"  # Formato que funcionou no Postman
     }
 
+    try:
+        response = requests.post(api_url, json=payload, headers=headers, timeout=60)
+        
+        # Debug adicional
+        print(f"Status Code: {response.status_code}")
+        print(f"Response: {response.text}")
+        
+        response.raise_for_status()
+        return response.json()
+    except requests.Timeout:
+        raise RuntimeError("Timeout na requisição para a API DeepSeek")
+    except requests.RequestException as e:
+        raise RuntimeError(f"Erro na requisição: {str(e)}")
+
+def get_deepseek_summary(raw_text: str, user_prompt: str) -> str:
+    """
+    Versão ajustada do gerador de resumos
+    """
     payload = {
+        "model": "deepseek-chat",
         "messages": [
             {
-                "role": "system",
+                "role": "system", 
                 "content": "Você é um especialista em resumos concisos para estudos."
             },
             {
@@ -35,33 +47,11 @@ def get_deepseek_summary(raw_text: str, user_prompt: str) -> str:
                 "content": f"{user_prompt}\n\nTexto: {raw_text}"
             }
         ],
-        "model": "deepseek-chat",       # Ajustar o modelo
-        "max_tokens": 2048,            
-        "temperature": 0.5,
-        "top_p": 1,
-        "frequency_penalty": 0,
-        "presence_penalty": 0,
-        "response_format": {
-            "type": "text"
-        },
-        "stop": None,
-        "stream": False,
-        "stream_options": None,
-        "tools": None,
-        "tool_choice": "none",
-        "logprobs": False,
-        "top_logprobs": None
+        "stream": False 
     }
 
     try:
-        response = requests.post(api_url, json=payload, headers=headers, timeout=60)
-        response.raise_for_status()  
-
-        data = response.json()
-        resumo = data["choices"][0]["message"]["content"]
-        return resumo.strip()
-
-    except requests.RequestException as e:
-        raise RuntimeError(f"Erro HTTP ao chamar API DeepSeek: {str(e)}")
+        data = call_deepseek_api(payload)
+        return data["choices"][0]["message"]["content"].strip()
     except (KeyError, IndexError) as e:
-        raise RuntimeError(f"Formato inesperado da resposta do DeepSeek: {str(e)}")
+        raise RuntimeError(f"Resposta inesperada da API: {str(e)}")

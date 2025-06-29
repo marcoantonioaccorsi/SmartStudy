@@ -3,9 +3,10 @@ import uuid
 import subprocess
 from pathlib import Path
 
-TEMP_DIR = Path("temp") 
+TEMP_DIR = Path("temp")
 
 TEMP_DIR.mkdir(exist_ok=True)
+
 
 def upload_video_to_local(file_object) -> str:
     """
@@ -33,15 +34,27 @@ def download_youtube_video(url: str) -> str:
         "yt-dlp",
         "--no-playlist",
         "-x",                      # extrair apenas o áudio
-        "--audio-format", "mp3",  
+        "--audio-format", "mp3",
         "--audio-quality", "9",    # 9 = pior qualidade = menor arquivo
         url,
         "-o", str(output_path)     # nome do arquivo de saída
     ]
 
     try:
-        subprocess.run(command, check=True)
-    except subprocess.CalledProcessError as e:
-        raise RuntimeError(f"Erro ao baixar vídeo do YouTube: {e}")
+        # Captura a saída para diagnóstico e depuração
+        result = subprocess.run(command, check=True,
+                                capture_output=True, text=True)
 
-    return str(output_path)
+        # Verifica se o arquivo foi criado corretamente
+        if not output_path.exists():
+            # yt-dlp às vezes adiciona extensões
+            base_name = unique_filename.split('.')[0]
+            potential_files = list(TEMP_DIR.glob(f"{base_name}.*"))
+            if potential_files:
+                return str(potential_files[0])
+
+        return str(output_path)
+    except subprocess.CalledProcessError as e:
+        error_detail = f"Saída: {e.stdout}\nErro: {e.stderr}" if hasattr(
+            e, 'stdout') else str(e)
+        raise RuntimeError(f"Erro ao baixar vídeo do YouTube: {error_detail}")

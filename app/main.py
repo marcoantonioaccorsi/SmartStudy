@@ -1,5 +1,7 @@
 import os
 from dotenv import load_dotenv
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()  # Carrega variáveis de ambiente do .env
 
@@ -13,6 +15,15 @@ from app.routers.export_router import export_router
 from app.routers.test_flow_router import test_flow_router
 
 app = FastAPI()
+
+# Configuração do CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],  #frontend Vite
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(video_router, prefix="/videos", tags=["Videos"])
 app.include_router(transcript_router, prefix="/convert", tags=["Convert to text"])
